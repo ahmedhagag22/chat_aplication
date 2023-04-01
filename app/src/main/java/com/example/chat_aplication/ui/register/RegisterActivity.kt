@@ -1,10 +1,12 @@
 package com.example.chat_aplication.ui.register
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import com.example.chat_aplication.R
 import com.example.chat_aplication.databinding.ActivityRegisterBinding
 import com.example.chat_aplication.ui.BaseActivity
+import com.example.chat_aplication.ui.home.HomeActivity
 
 class RegisterActivity : BaseActivity<ActivityRegisterBinding, RegisterViewModel>(), Navigator {
     override fun getLayoutId(): Int {
@@ -17,8 +19,8 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding, RegisterViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewBinding.vm=viewModel
-        viewModel.navigator=this
+        viewBinding.vm = viewModel
+        viewModel.navigator = this
 
 
         showpass(
@@ -42,6 +44,11 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding, RegisterViewModel
         }
 
 
+    }
+
+    override fun goToHome() {
+        var intent = Intent(this, HomeActivity::class.java)
+        startActivity(intent)
     }
 
 

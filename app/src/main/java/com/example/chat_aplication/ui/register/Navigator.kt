@@ -4,5 +4,6 @@ import com.example.chat_aplication.ui.BaseNavigator
 
 
 interface Navigator:BaseNavigator {
+    fun goToHome()
 
 }

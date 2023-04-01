@@ -75,7 +75,7 @@
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
                         android:hint="password"
-                        android:inputType="numberPassword"
+                        android:inputType="textPassword"
                         android:text="@={vm.password}"
                         app:layout_constraintTop_toTopOf="parent"></EditText>
 
