@@ -12,6 +12,7 @@ import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModel
+import com.example.Base.OnDialogClickListner
 
 abstract class BaseActivity<VB : ViewDataBinding, Vm : BaseViewModel<*>> : AppCompatActivity(),
     BaseNavigator {
@@ -62,12 +63,29 @@ abstract class BaseActivity<VB : ViewDataBinding, Vm : BaseViewModel<*>> : AppCo
         progressDialog = null
     }
 
-    override fun showMessage(message: String) {
-        alertDialog =
+    override fun showMessage(
+        message: String,
+        posActionTitle: String?,
+        posAction: OnDialogClickListner?,
+        negActionTitle: String?,
+        negAction: OnDialogClickListner?,
+    ) {
+        val builder =
             AlertDialog.Builder(this)
                 .setMessage(message)
-                .setPositiveButton("ok")
-                { dialogInterface, i -> dialogInterface.cancel() }.show()
+        if (posActionTitle != null) {
+            builder.setPositiveButton(posActionTitle) { DialogInterface, i ->
+                DialogInterface.dismiss()
+                posAction?.onClick()
+            }}
+            if (negActionTitle != null) {
+                builder.setPositiveButton(posActionTitle) { DialogInterface, i ->
+                    DialogInterface.dismiss()
+                   negAction?.onClick()
+                }
+        }
+        builder.show()
+
     }
 
 
@@ -76,7 +94,13 @@ abstract class BaseActivity<VB : ViewDataBinding, Vm : BaseViewModel<*>> : AppCo
 interface BaseNavigator {
     fun showLoading(message: String)
     fun hideDialoge()
-    fun showMessage(message: String)
+    fun showMessage(
+        message: String,
+        posActionTitle: String? = null,
+        posAction: OnDialogClickListner? = null,
+        negActionTitle: String? = null,
+        negAction: OnDialogClickListner? = null,
+    )
 
 }
 

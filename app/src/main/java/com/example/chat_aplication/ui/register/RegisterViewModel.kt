@@ -1,10 +1,13 @@
 package com.example.chat_aplication.ui.register
 
 import androidx.databinding.ObservableField
+import com.example.chat_aplication.UserProvider
+import com.example.chat_aplication.dataBase.FireStoreUtils
+import com.example.chat_aplication.dataBase.models.users
 import com.example.chat_aplication.ui.BaseViewModel
 import com.google.firebase.auth.FirebaseAuth
 
-class RegisterViewModel:BaseViewModel<Navigator>() {
+class RegisterViewModel : BaseViewModel<Navigator>() {
     var userName = ObservableField<String>()
     var errorUserName = ObservableField<String?>()
     var email = ObservableField<String>()
@@ -25,12 +28,11 @@ class RegisterViewModel:BaseViewModel<Navigator>() {
         navigator?.showLoading("Loading....")
         auth.createUserWithEmailAndPassword(email.get()!!, password.get()!!)
             .addOnCompleteListener {
-                navigator?.hideDialoge()
+
                 if (it.isSuccessful) {
-                    navigator?.showMessage("successful registration")
-
-
+                    insertDataToDataBase(it.result.user?.uid!!)
                 } else {
+                    navigator?.hideDialoge()
                     navigator?.showMessage(it.exception?.localizedMessage ?: "")
                 }
             }
@@ -86,6 +88,27 @@ class RegisterViewModel:BaseViewModel<Navigator>() {
         }
 
         return isValid
+    }
+
+    fun insertDataToDataBase(uid: String) {
+        val user = users(
+            id = uid,
+            userName = userName.get(),
+            email = email.get(),
+            phone = phone.get()
+        )
+        FireStoreUtils()
+            .addUserToDataBase(user)
+            .addOnCompleteListener {
+                navigator?.hideDialoge()
+                if (it.isSuccessful) {
+                    UserProvider.user=user
+                   // navigator?.showMessage("successful registration")
+                    navigator?.goToHome()
+                } else {
+                    navigator?.showMessage(it.exception?.localizedMessage ?: "")
+                }
+            }
     }
 
 }

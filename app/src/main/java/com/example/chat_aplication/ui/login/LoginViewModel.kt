@@ -1,6 +1,9 @@
 package com.example.chat_aplication.ui.login
 
 import androidx.databinding.ObservableField
+import com.example.chat_aplication.UserProvider
+import com.example.chat_aplication.dataBase.FireStoreUtils
+import com.example.chat_aplication.dataBase.models.users
 import com.example.chat_aplication.ui.BaseViewModel
 import com.google.firebase.auth.FirebaseAuth
 
@@ -19,13 +22,11 @@ class LoginViewModel : BaseViewModel<LoginNavigator>() {
             email.get()!!,
             password.get()!!
         ).addOnCompleteListener {
-            navigator?.hideDialoge()
             if (it.isSuccessful) {
-                navigator?.goToHome()
-                return@addOnCompleteListener
+                getUserFromDataBase(it.result.user?.uid!!)
             }
             navigator?.showMessage(it.exception?.localizedMessage ?: "")
-
+            navigator?.hideDialoge()
         }
 
 
@@ -58,9 +59,24 @@ class LoginViewModel : BaseViewModel<LoginNavigator>() {
     fun goToRegister() {
         navigator?.goToRegister()
     }
-    fun gotoPassword()
-    {
+
+    fun gotoPassword() {
         navigator?.gotoPassword()
     }
 
+    fun getUserFromDataBase(uid: String) {
+        FireStoreUtils()
+            .getUserFromDataBasse(uid)
+            .addOnCompleteListener {
+                navigator?.hideDialoge()
+                if (it.isSuccessful) {
+                    var user=it.result.toObject(users::class.java);
+                    UserProvider.user=user
+                    navigator?.goToHome()
+                } else {
+                    navigator?.showMessage(it.exception?.localizedMessage ?: "")
+                }
+            }
+
+    }
 }
