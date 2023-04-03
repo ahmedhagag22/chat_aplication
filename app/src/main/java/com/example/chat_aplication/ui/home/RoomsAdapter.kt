@@ -8,11 +8,12 @@ import com.example.chat_aplication.R
 import com.example.chat_aplication.dataBase.models.Room
 import com.example.chat_aplication.databinding.ItemRoomBinding
 
-class RoomsAdapter(var items: List<Room>?=null) : RecyclerView.Adapter<RoomsAdapter.ViewHolder>() {
+class RoomsAdapter(var items: List<Room>? = null) :
+    RecyclerView.Adapter<RoomsAdapter.ViewHolder>() {
 
     class ViewHolder(var viewBinding: ItemRoomBinding) : RecyclerView.ViewHolder(viewBinding.root) {
         fun bind(room: Room) {
-            viewBinding.item=room
+            viewBinding.item = room
             viewBinding.invalidateAll()
 
         }
@@ -30,11 +31,24 @@ class RoomsAdapter(var items: List<Room>?=null) : RecyclerView.Adapter<RoomsAdap
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(items!![position])
 
+        onItemClickListener.let { clickListener ->
+            holder.viewBinding.root.setOnClickListener {
+                clickListener?.onItemClick(position, items!![position])
+            }
+
+        }
+
     }
 
     override fun getItemCount(): Int = items?.size ?: 0
     fun changeData(newLis: List<Room>?) {
-            items=newLis
+        items = newLis
         notifyDataSetChanged()
+    }
+
+    var onItemClickListener: OnItemClickListener? = null
+
+    interface OnItemClickListener {
+        fun onItemClick(position: Int, items: Room)
     }
 }

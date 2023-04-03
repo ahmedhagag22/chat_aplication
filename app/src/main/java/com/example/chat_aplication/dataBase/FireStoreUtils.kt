@@ -1,5 +1,6 @@
 package com.example.chat_aplication.dataBase
 
+import com.example.chat_aplication.dataBase.models.Messages
 import com.example.chat_aplication.dataBase.models.Room
 import com.example.chat_aplication.dataBase.models.users
 import com.google.android.gms.tasks.Task
@@ -17,6 +18,7 @@ class FireStoreUtils {
             .document(users.id!!)
         return docRef.set(users)
     }
+
 
     fun getUserFromDataBasse(uid: String): Task<DocumentSnapshot> {
         var docRef = db.collection(userCollection)
@@ -40,7 +42,16 @@ class FireStoreUtils {
     fun getAllRoomsToDataBase(): Task<QuerySnapshot> {
         return getRoomCollection()
             .get()
-
-
     }
+    fun sendMessage(message: Messages):Task<Void>
+    {
+       var roomRef= getRoomCollection()
+            .document(message.roomId?:"")
+         var messages=roomRef.collection("messages")
+        var messageDoc=messages.document()
+        message.id=messageDoc.id
+        return messageDoc.set(message)
+    }
+
+
 }
