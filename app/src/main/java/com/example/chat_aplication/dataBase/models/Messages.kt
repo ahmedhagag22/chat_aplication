@@ -1,6 +1,7 @@
 package com.example.chat_aplication.dataBase.models
 
 import com.google.firebase.Timestamp
+import java.text.SimpleDateFormat
 
 data class Messages(
     var id:String?=null,
@@ -9,4 +10,12 @@ data class Messages(
     var senderId:String?=null,
     var senderName:String?=null,
     var dateTime:Timestamp?=null,
-)
+){
+
+    fun formatDateTime():String
+    {
+        val date=dateTime?.toDate()?: return ""
+        val dateFormatter=SimpleDateFormat("hh:mm")
+        return dateFormatter.format(date)
+    }
+}

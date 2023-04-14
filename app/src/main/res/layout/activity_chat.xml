@@ -47,6 +47,7 @@
         </com.google.android.material.appbar.AppBarLayout>
 
         <include
+            android:id="@+id/contentChat"
             layout="@layout/contentchat"
             app:vm="@{vm}" />
 
