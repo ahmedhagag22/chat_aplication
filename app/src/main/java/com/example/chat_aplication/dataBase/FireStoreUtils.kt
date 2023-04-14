@@ -7,6 +7,7 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 
 class FireStoreUtils {
@@ -43,14 +44,27 @@ class FireStoreUtils {
         return getRoomCollection()
             .get()
     }
-    fun sendMessage(message: Messages):Task<Void>
-    {
-       var roomRef= getRoomCollection()
-            .document(message.roomId?:"")
-         var messages=roomRef.collection("messages")
-        var messageDoc=messages.document()
-        message.id=messageDoc.id
+
+    fun getYourRoom(createdBy: String): Task<QuerySnapshot> {
+        return getRoomCollection().document(createdBy)
+            .collection("Rooms")
+            .get()
+    }
+
+
+    fun sendMessage(message: Messages): Task<Void> {
+        var roomRef = getRoomCollection()
+            .document(message.roomId ?: "")
+        var messages = roomRef.collection("messages")
+        var messageDoc = messages.document()
+        message.id = messageDoc.id
         return messageDoc.set(message)
+    }
+
+    fun getRoomMessages(roomId: String): Query{
+        return getRoomCollection().document(roomId)
+            .collection("messages")
+            .orderBy("dateTime")
     }
 
 
