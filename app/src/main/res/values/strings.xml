@@ -3,11 +3,13 @@
     <string name="add_rom">add room</string>
     <string name="creating_room">Creating Room</string>
     <string name="create_new_room">Create New Room</string>
+    <string name="create_account">Or Create My Account</string>
     <array name="typesOfCategory">
         <item>Sports</item>
         <item>Moves</item>
         <item>Music</item>
     </array>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
 </resources>
