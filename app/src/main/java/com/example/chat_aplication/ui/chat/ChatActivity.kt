@@ -15,6 +15,8 @@ import com.example.chat_aplication.ui.BaseActivity
 import com.example.chat_aplication.ui.home.HomeActivity
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.ListenerRegistration
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class ChatActivity : BaseActivity<ActivityChatBinding, ChatViewModel>(), NavigatorChat {
     var room: Room? = null
@@ -45,7 +47,9 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatViewModel>(), Navigat
     }
     //update messages (real time dataBase) lw ay 7ad b3t messages y7sal update (we ygeb kl el messages)
     var listener: ListenerRegistration? = null
+
     fun subscribeToMessagesChange() {
+        GlobalScope.launch {
         if (listener == null) {
             listener = FireStoreUtils()
                 .getRoomMessages(room?.id ?: "")
@@ -68,7 +72,7 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatViewModel>(), Navigat
                     }
                 )
         }
-    }
+    }}
 
 
     override fun onStop() {

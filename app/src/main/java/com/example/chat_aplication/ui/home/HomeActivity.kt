@@ -8,8 +8,9 @@ import com.example.chat_aplication.R
 import com.example.chat_aplication.dataBase.models.Room
 import com.example.chat_aplication.databinding.ActivityHomeBinding
 import com.example.chat_aplication.ui.BaseActivity
-import com.example.chat_aplication.ui.bottomSheet.JoinRoomFragment
+
 import com.example.chat_aplication.ui.chat.ChatActivity
+import com.example.chat_aplication.ui.login.LoginActivity
 import com.example.chat_aplication.ui.room.AddRoamActivity
 
 class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(), Navigator_Home {
@@ -43,7 +44,8 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(), Navigat
 
                 var intent = Intent(this@HomeActivity, ChatActivity::class.java)
                 intent.putExtra(Constant.detailsRoom, items)
-                startActivity(intent) }
+                startActivity(intent)
+            }
         }
     }
 
@@ -60,11 +62,16 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(), Navigat
         var intent = Intent(this, AddRoamActivity::class.java)
         startActivity(intent)
     }
-//    private fun showAddTaskBottomSheet() {
+
+    //    private fun showAddTaskBottomSheet() {
 //        var addTaskFragment=JoinRoomFragment()
 //        addTaskFragment.
 //        }
 //        //بياخد مني فرجمنت منجر ونل
 //        addTaskFragment.show(supportFragmentManager,null)
 //    }
+    override fun goToLogin() {
+        var intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+    }
 }

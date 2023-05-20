@@ -4,6 +4,7 @@ import com.example.chat_aplication.dataBase.models.Messages
 import com.example.chat_aplication.dataBase.models.Room
 import com.example.chat_aplication.dataBase.models.users
 import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
@@ -40,7 +41,7 @@ class FireStoreUtils {
 
     }
 
-    fun getAllRoomsToDataBase(): Task<QuerySnapshot> {
+   suspend fun getAllRoomsToDataBase(): Task<QuerySnapshot> {
         return getRoomCollection()
             .get()
     }
@@ -52,7 +53,7 @@ class FireStoreUtils {
     }
 
 
-    fun sendMessage(message: Messages): Task<Void> {
+   suspend fun sendMessage(message: Messages): Task<Void> {
         var roomRef = getRoomCollection()
             .document(message.roomId ?: "")
         var messages = roomRef.collection("messages")
@@ -61,10 +62,14 @@ class FireStoreUtils {
         return messageDoc.set(message)
     }
 
-    fun getRoomMessages(roomId: String): Query{
+    suspend fun getRoomMessages(roomId: String): Query{
         return getRoomCollection().document(roomId)
             .collection("messages")
             .orderBy("dateTime")
+    }
+    fun signOut()
+    {
+        FirebaseAuth.getInstance().signOut()
     }
 
 

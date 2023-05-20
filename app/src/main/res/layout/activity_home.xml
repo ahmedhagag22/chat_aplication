@@ -35,6 +35,14 @@
                     android:textColor="@color/white"
                     android:textSize="21sp"
                     android:textStyle="bold"></TextView>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_logout"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="10dp"
+                    android:onClick="@{()->vm.signOut()}"
+                    />
 
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>

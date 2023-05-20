@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">chat_aplication</string>
+    <string name="app_name">Room House</string>
     <string name="add_rom">add room</string>
     <string name="creating_room">Creating Room</string>
     <string name="create_new_room">Create New Room</string>

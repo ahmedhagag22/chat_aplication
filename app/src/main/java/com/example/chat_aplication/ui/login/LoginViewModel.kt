@@ -1,11 +1,13 @@
 package com.example.chat_aplication.ui.login
 
 import androidx.databinding.ObservableField
+import androidx.lifecycle.viewModelScope
 import com.example.chat_aplication.UserProvider
 import com.example.chat_aplication.dataBase.FireStoreUtils
 import com.example.chat_aplication.dataBase.models.users
 import com.example.chat_aplication.ui.BaseViewModel
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.launch
 
 class LoginViewModel : BaseViewModel<LoginNavigator>() {
     var email = ObservableField<String>()
@@ -15,6 +17,7 @@ class LoginViewModel : BaseViewModel<LoginNavigator>() {
     var auth = FirebaseAuth.getInstance()
 
     fun register() {
+
         if (!validateForm())
             return;
         navigator?.showLoading("Loading....")
@@ -22,14 +25,16 @@ class LoginViewModel : BaseViewModel<LoginNavigator>() {
             email.get()!!,
             password.get()!!
         ).addOnCompleteListener {
-            if (it.isSuccessful) {
-                getUserFromDataBase(it.result.user?.uid!!)
+            viewModelScope.launch {
+                try {
+                    if (it.isSuccessful)
+                        getUserFromDataBase(it.result.user?.uid!!)
+                } catch (e: Exception) {
+                    navigator?.showMessage(it.exception?.localizedMessage ?: "")
+                    navigator?.hideDialoge()
+                }
             }
-            navigator?.showMessage(it.exception?.localizedMessage ?: "")
-            navigator?.hideDialoge()
         }
-
-
     }
 
     fun validateForm(): Boolean {
@@ -64,14 +69,14 @@ class LoginViewModel : BaseViewModel<LoginNavigator>() {
         navigator?.gotoPassword()
     }
 
-    fun getUserFromDataBase(uid: String) {
+    suspend fun getUserFromDataBase(uid: String) {
         FireStoreUtils()
             .getUserFromDataBasse(uid)
             .addOnCompleteListener {
                 navigator?.hideDialoge()
                 if (it.isSuccessful) {
-                    var user=it.result.toObject(users::class.java);
-                    UserProvider.user=user
+                    var user = it.result.toObject(users::class.java);
+                    UserProvider.user = user
                     navigator?.goToHome()
                 } else {
                     navigator?.showMessage(it.exception?.localizedMessage ?: "")
